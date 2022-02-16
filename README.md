@@ -1,2 +1,4 @@
-# ReactApp-CoursesToStudy
-courses to study app built with React.js with support of local storage
+<p align="center">
+  <h1 align="center"> Courses to study React App </h1>
+  <img src="" align="center" />
+</p>
