@@ -19,7 +19,7 @@ export default class List extends Component {
                         <button className='edit' onClick={() => { this.toggleState() }}> EDIT  </button>
                     </span>
                     <span>
-                        <button className='delete' onClick={() => this.props.deleteCourse(this.props.index)}> DELETE </button>
+                        <button className='delete' onClick={() => this.props.deleteCourse(this.props.course.id)}> DELETE </button>
                     </span>
                 </div>
 
@@ -37,7 +37,7 @@ export default class List extends Component {
 
     updateCourse = (e) => {
         e.preventDefault();
-        this.props.editCourse(this.props.index, this.newInput.value)
+        this.props.editCourse(this.props.course.id, this.newInput.value)
         this.toggleState()
     }
 

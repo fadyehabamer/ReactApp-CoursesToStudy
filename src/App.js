@@ -4,7 +4,7 @@ import withReactContent from 'sweetalert2-react-content'
 
 import Form from './components/Form'
 import List from './components/List'
-import { loadCourses, saveCourses } from './storage'
+import { loadCourses, saveCourses, createId } from './storage'
 
 import './style/app.css'
 
@@ -43,7 +43,7 @@ export default class App extends Component {
       })
     } else {
       this.setState(prevState => ({
-        courses: [...prevState.courses, { name: current }]
+        courses: [...prevState.courses, { id: createId(), name: current }]
       }))
     }
     this.setState({
@@ -52,17 +52,17 @@ export default class App extends Component {
 
   }
 
-  deleteCourse = (index) => {
+  deleteCourse = (id) => {
     this.setState(prevState => ({
-      courses: prevState.courses.filter((course, i) => i !== index)
+      courses: prevState.courses.filter(course => course.id !== id)
     }))
 
   }
 
-  editCourse = (index, newValue) => {
+  editCourse = (id, newValue) => {
     this.setState(prevState => ({
-      courses: prevState.courses.map((course, i) =>
-        i === index ? { ...course, name: newValue } : course
+      courses: prevState.courses.map(course =>
+        course.id === id ? { ...course, name: newValue } : course
       )
     }))
 
@@ -72,9 +72,9 @@ export default class App extends Component {
   render() {
     const { courses } = this.state;
 
-    let renderCourses = courses.map((course, index) => {
+    let renderCourses = courses.map((course) => {
       return (
-        <List key={index} index={index} course={course} deleteCourse={this.deleteCourse} editCourse={this.editCourse} />
+        <List key={course.id} course={course} deleteCourse={this.deleteCourse} editCourse={this.editCourse} />
       )
     })
     return (
