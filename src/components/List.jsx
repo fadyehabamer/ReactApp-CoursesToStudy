@@ -48,7 +48,7 @@ export default class List extends Component {
     updateForm = () => {
         return (
             <form onSubmit={this.updateCourse}>
-                <input type="text" ref={(v) => this.newInput = v} defaultValue={this.props.course.name} />
+                <input type="text" aria-label={`Edit ${this.props.course.name}`} ref={(v) => this.newInput = v} defaultValue={this.props.course.name} />
                 <input type="submit" value="update" />
             </form>
         )
