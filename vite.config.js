@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
@@ -11,5 +12,12 @@ export default defineConfig({
     // Same output folder as Create React App, so the Vercel project's
     // "Output Directory" (build) keeps working.
     outDir: 'build',
+  },
+  test: {
+    environment: 'jsdom',
+    // describe/test/expect/vi as globals, like Jest; also lets Testing
+    // Library clean up the DOM after each test automatically.
+    globals: true,
+    setupFiles: './src/setupTests.js',
   },
 });
