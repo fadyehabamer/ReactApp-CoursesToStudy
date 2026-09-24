@@ -32,7 +32,7 @@ export default class App extends Component {
   addCourse = (e) => {
     e.preventDefault();
     // console.log("ADDED");
-    let current = this.state.current
+    let current = this.state.current.trim()
 
     if (current === '') {
       const MySwal = withReactContent(Swal)

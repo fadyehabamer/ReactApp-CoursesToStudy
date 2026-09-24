@@ -37,7 +37,11 @@ export default class List extends Component {
 
     updateCourse = (e) => {
         e.preventDefault();
-        this.props.editCourse(this.props.course.id, this.newInput.value)
+        const value = this.newInput.value.trim()
+        // An empty edit would leave a blank course; keep the old name instead.
+        if (value) {
+            this.props.editCourse(this.props.course.id, value)
+        }
         this.toggleState()
     }
 
