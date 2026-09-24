@@ -19,7 +19,7 @@ export default class List extends Component {
                         <button className='edit' onClick={() => { this.toggleState() }}> EDIT  </button>
                     </span>
                     <span>
-                        <button className='delete' onClick={() => this.props.deleteCourse(this.props.index)}> DELETE </button>
+                        <button className='delete' onClick={() => this.props.deleteCourse(this.props.course.id)}> DELETE </button>
                     </span>
                 </div>
 
@@ -37,14 +37,18 @@ export default class List extends Component {
 
     updateCourse = (e) => {
         e.preventDefault();
-        this.props.editCourse(this.props.index, this.newInput.value)
+        const value = this.newInput.value.trim()
+        // An empty edit would leave a blank course; keep the old name instead.
+        if (value) {
+            this.props.editCourse(this.props.course.id, value)
+        }
         this.toggleState()
     }
 
     updateForm = () => {
         return (
             <form onSubmit={this.updateCourse}>
-                <input type="text" ref={(v) => this.newInput = v} defaultValue={this.props.course.name} />
+                <input type="text" aria-label={`Edit ${this.props.course.name}`} ref={(v) => this.newInput = v} defaultValue={this.props.course.name} />
                 <input type="submit" value="update" />
             </form>
         )

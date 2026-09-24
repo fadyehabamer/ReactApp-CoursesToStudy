@@ -4,12 +4,13 @@ import withReactContent from 'sweetalert2-react-content'
 
 import Form from './components/Form'
 import List from './components/List'
+import { loadCourses, saveCourses, createId } from './storage'
 
 import './style/app.css'
 
 export default class App extends Component {
   state = {
-    courses: JSON.parse(localStorage.getItem('savedCourses')) ? JSON.parse(localStorage.getItem('savedCourses')) : [],
+    courses: loadCourses(),
     current: '',
   }
 
@@ -18,15 +19,20 @@ export default class App extends Component {
     this.setState({
       current: e.target.value
     })
-    localStorage.setItem('savedCourses', JSON.stringify(this.state.courses))
+  }
 
+  // Persist after React has applied the update; saving right after
+  // setState() wrote the previous (stale) this.state.
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.courses !== this.state.courses) {
+      saveCourses(this.state.courses)
+    }
   }
 
   addCourse = (e) => {
     e.preventDefault();
     // console.log("ADDED");
-    let current = this.state.current
-    let courses = this.state.courses
+    let current = this.state.current.trim()
 
     if (current === '') {
       const MySwal = withReactContent(Swal)
@@ -36,36 +42,29 @@ export default class App extends Component {
         icon: 'error'
       })
     } else {
-      courses.push({ name: current })
+      this.setState(prevState => ({
+        courses: [...prevState.courses, { id: createId(), name: current }]
+      }))
     }
     this.setState({
-      // courses : courses
-      courses,
       current: ''
     })
-    localStorage.setItem('savedCourses', JSON.stringify(this.state.courses))
 
   }
 
-  deleteCourse = (index) => {
-    let courses = this.state.courses
-    courses.splice(index, 1)
-    this.setState({
-      courses
-    })
-    localStorage.setItem('savedCourses', JSON.stringify(this.state.courses))
+  deleteCourse = (id) => {
+    this.setState(prevState => ({
+      courses: prevState.courses.filter(course => course.id !== id)
+    }))
 
   }
 
-  editCourse = (index, newValue) => {
-    let courses = this.state.courses
-    let course = courses[index]
-    course.name = newValue
-
-    this.setState({
-      courses
-    })
-    localStorage.setItem('savedCourses', JSON.stringify(this.state.courses))
+  editCourse = (id, newValue) => {
+    this.setState(prevState => ({
+      courses: prevState.courses.map(course =>
+        course.id === id ? { ...course, name: newValue } : course
+      )
+    }))
 
   }
 
@@ -73,9 +72,9 @@ export default class App extends Component {
   render() {
     const { courses } = this.state;
 
-    let renderCourses = courses.map((course, index) => {
+    let renderCourses = courses.map((course) => {
       return (
-        <List key={index} index={index} course={course} deleteCourse={this.deleteCourse} editCourse={this.editCourse} />
+        <List key={course.id} course={course} deleteCourse={this.deleteCourse} editCourse={this.editCourse} />
       )
     })
     return (
