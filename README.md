@@ -3,6 +3,8 @@
   <img src="./src/Assets/preview.png" align="center" />
 </p>
 
+[![CI](https://github.com/fadyehabamer/ReactApp-CoursesToStudy/actions/workflows/ci.yml/badge.svg)](https://github.com/fadyehabamer/ReactApp-CoursesToStudy/actions/workflows/ci.yml)
+
 
 **Live demo:** https://react-app-courses-to-study.vercel.app
 
